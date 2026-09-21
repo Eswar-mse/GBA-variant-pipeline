@@ -1,0 +1,10 @@
+data/raw/*.fastq.gz
+data/reference/*.fa
+data/reference/*.fasta
+data/reference/*.fai
+data/reference/*.dict
+results/aligned/*.bam
+results/aligned/*.bai
+results/trimmed/*.fastq.gz
+*.g.vcf.gz
+*.g.vcf.gz.tbi
