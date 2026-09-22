@@ -8,3 +8,10 @@ results/aligned/*.bai
 results/trimmed/*.fastq.gz
 *.g.vcf.gz
 *.g.vcf.gz.tbi
+results/variants/*_db/
+results/fastqc/*.zip
+data/reference/*.amb
+data/reference/*.ann
+data/reference/*.bwt
+data/reference/*.pac
+data/reference/*.sa

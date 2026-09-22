@@ -1,0 +1,19 @@
+# Readme for Garvan_NA12878_HG001_HiSeq_Exome
+# ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/
+# NA12878 exomes
+# Facility: Garvan Institute of Medical Research (http://www.garvan.org.au/)
+# Sequencer: HiSeq2500
+# kit: Nextera Rapid Capture Exome and Expanded Exome
+# NIST7035 and NIST7086 are 2 vials of NA12878 DNA, a library was made from each, each library was sequenced on 2 lanes
+
+# Files
+*fastq.gz - raw fastq's
+*_trimmed.fastq - after adapter trim (trimgalore) of Nextera adapter sequences
+*bwa.markDuplicates.bam - adapter trimmed fastq's aligned to hg19 using bwa(-backtrack) and then duplicate marked (Picard)
+*hc.snps.indels.vcf - raw vcf's from GATK haplotypecaller (after BQSR and indel realign). Note: no VQSR
+*nexterarapidcapture_expandedexome_targetedregions.bed - targeted exome regions from Illumina
+
+Nextera adapters are 
+Read1  CTGTCTCTTATACACATCTCCGAGCCCACGAGAC
+Read2  CTGTCTCTTATACACATCTGACGCTGCCGACGA
+(reference: https://my.illumina.com/MyIllumina/Bulletin/N1IKmFNt9kyP2imk4ysEWQ/what-sequences-do-i-use-for-adapter-trimming)

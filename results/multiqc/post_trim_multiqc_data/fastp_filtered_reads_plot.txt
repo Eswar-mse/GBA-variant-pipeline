@@ -1,0 +1,3 @@
+Sample	Passed Filter	Low Quality	Too Many N	Low Complexity	Too Short	Too Long
+NIST7035_TAAGGCGA_L001	38193508.0	2189130.0	23362.0	nan	4.0	0.0
+NIST7035_TAAGGCGA_L002	38876508.0	2266458.0	43848.0	nan	6.0	0.0

@@ -1,0 +1,11 @@
+Module	Section	Sample Name	Source
+fastp	all_sections	NIST7035_TAAGGCGA_L001	/home/eswar/Documents/Projects/NGS-starter/results/trimmed/NIST7035_L001_fastp.json
+fastp	all_sections	NIST7035_TAAGGCGA_L002	/home/eswar/Documents/Projects/NGS-starter/results/trimmed/NIST7035_L002_fastp.json
+FastQC	all_sections	NIST7035_L001_R1	/home/eswar/Documents/Projects/NGS-starter/results/fastqc/NIST7035_L001_R1_trimmed_fastqc.zip
+FastQC	all_sections	NIST7035_L001_R2	/home/eswar/Documents/Projects/NGS-starter/results/fastqc/NIST7035_L001_R2_trimmed_fastqc.zip
+FastQC	all_sections	NIST7035_L002_R1	/home/eswar/Documents/Projects/NGS-starter/results/fastqc/NIST7035_L002_R1_trimmed_fastqc.zip
+FastQC	all_sections	NIST7035_L002_R2	/home/eswar/Documents/Projects/NGS-starter/results/fastqc/NIST7035_L002_R2_trimmed_fastqc.zip
+FastQC	all_sections	NIST7035_TAAGGCGA_L001_R1_001	/home/eswar/Documents/Projects/NGS-starter/results/fastqc/NIST7035_TAAGGCGA_L001_R1_001_fastqc.zip
+FastQC	all_sections	NIST7035_TAAGGCGA_L001_R2_001	/home/eswar/Documents/Projects/NGS-starter/results/fastqc/NIST7035_TAAGGCGA_L001_R2_001_fastqc.zip
+FastQC	all_sections	NIST7035_TAAGGCGA_L002_R1_001	/home/eswar/Documents/Projects/NGS-starter/results/fastqc/NIST7035_TAAGGCGA_L002_R1_001_fastqc.zip
+FastQC	all_sections	NIST7035_TAAGGCGA_L002_R2_001	/home/eswar/Documents/Projects/NGS-starter/results/fastqc/NIST7035_TAAGGCGA_L002_R2_001_fastqc.zip

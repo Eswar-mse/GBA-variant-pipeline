@@ -1,0 +1,19 @@
+name: ngs-gba
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python=3.10
+  - fastp
+  - gatk4
+  - samtools
+  - sra-tools
+  - bwa
+  - bcftools
+  - fastqc
+  - openssl=1.0
+  - libnsl
+  - igv
+  - openjdk
+prefix: /home/eswar/miniconda3/envs/ngs-gba

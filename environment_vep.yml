@@ -1,0 +1,8 @@
+name: vep-env
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - ensembl-vep
+prefix: /home/eswar/miniconda3/envs/vep-env
