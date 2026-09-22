@@ -111,11 +111,12 @@ For contrast, here's a clean, high-confidence real variant elsewhere in the gene
 Both samples are, biologically, the **same individual** (NA12878, two separate library preparations from the same source DNA). Joint genotyping both together provided a useful internal consistency check: real variants should agree between the two; anything discordant is a flag, not a finding.
 
 ```mermaid
-flowchart LR
-    A[26 raw candidate sites] -->|GATK VariantFiltration| B[10 PASS]
-    A -->|caught by LowDepth / LowMQ filters| C[16 filtered out<br/>GBAP1 pseudogene artifacts]
-    B -->|located in known pseudogene zone,<br/>flagged as low-confidence| D[1 borderline]
-    B --> E[9 high-confidence<br/>real GBA1 variants]
+flowchart TD
+    A[26 raw candidate sites] --> B[GATK VariantFiltration]
+    B --> C[10 PASS]
+    B --> D[16 filtered out<br/>GBAP1 artifacts]
+    C --> E[9 high-confidence<br/>real GBA1 variants]
+    C --> F[1 borderline<br/>pseudogene zone,<br/>low-confidence]
 ```
 
 A closer look at the phased indel cluster itself (chr1:155,206,277-155,206,284, intron 8) in IGV:
