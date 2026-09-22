@@ -96,6 +96,10 @@ flowchart LR
     B --> E[9 high-confidence<br/>real GBA1 variants]
 ```
 
+A closer look at the phased indel cluster itself (chr1:155,206,277-155,206,284, intron 8) in IGV:
+
+![Indel cluster region](report/images/10_igv_indel_cluster.png)
+
 9 of the 10 PASS variants were consistent, high-confidence calls agreeing across both samples. The 10th (chr1:155,212,092) technically passed the formal thresholds but sits directly inside the known pseudogene-affected region and was called in only one sample at shallow depth — treated as low-confidence noise rather than a real finding, precisely because the biology of the region was already understood from Step 4.
 
 ## Step 6 — Annotation (VEP)
@@ -139,7 +143,8 @@ Since no missense variant was found to run through structural modeling (the orig
 ```
 GBA-variant-pipeline/
 ├── README.md
-├── environment.yml
+├── environment_ngs-gba.yml
+├── environment_vep.yml
 ├── data/
 │   └── provenance.md
 ├── scripts/
