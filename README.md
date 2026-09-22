@@ -23,6 +23,17 @@
 | Environment management | Conda |
 | Reference build | GRCh37/hg19, Ensembl release 110 |
 
+*Self-directed project, ~6 weeks part-time, built end-to-end from raw FASTQ to a validated functional finding.*
+
+## Key results, front and center
+
+- **2 samples, same individual, joint-genotyped**, 26 candidate sites → 10 pass filtering → 9 high-confidence real variants
+- **0 missense/coding variants**, an honest scope limitation of a 2-sample, single-region WES study, reported plainly rather than dressed up
+- **1 predicted pseudogene mis-mapping artifact zone**, correctly anticipated in advance and cleanly caught by filtering, the project's strongest evidence of genuine technical understanding
+- **1 splice-region variant cluster, quantitatively tested, found not to be splice-disrupting**, a complete, real negative result using two independent state-of-the-art predictors (SpliceAI, Pangolin)
+
+---
+
 
 > **Scope statement, upfront:** this is a **WES (whole-exome)** analysis, not WGS. Two public NA12878 exome samples (GIAB/Garvan, NIST7035 & NIST7086) were processed against a **GRCh37/hg19** reference, restricted to chromosome 1, focused on the *GBA1* gene (glucocerebrosidase), the strongest known genetic risk factor for Parkinson's disease, and the gene mutated in Gaucher disease.
 
@@ -35,6 +46,10 @@ GBA1 sits at a genuinely interesting intersection: it's the classic gene behind 
 ---
 
 ## Pipeline overview
+
+**Quick text summary** (the diagram below renders on GitHub web/desktop; if you're viewing this on mobile or an embed that doesn't render Mermaid, here's the flow in plain text):
+
+Raw FASTQ → FastQC/MultiQC → fastp trimming → FastQC (post-trim) → BWA-MEM alignment (GRCh37, full chr1) → samtools merge → GATK MarkDuplicates → GATK HaplotypeCaller (GVCF) → joint genotyping (GenomicsDBImport + GenotypeGVCFs) → GATK VariantFiltration → VEP annotation → SpliceAI/Pangolin splice scoring → final report.
 
 ```mermaid
 flowchart TD
@@ -54,7 +69,7 @@ flowchart TD
 
 ---
 
-## Step 1, Quality Control
+## Step 1: Quality Control
 
 Raw reads (~20M read pairs per lane, ~40M total per sample) were checked with FastQC and summarized across all 16 files with MultiQC.
 
@@ -70,7 +85,7 @@ Adapter content climbed toward the read ends, as expected for exome libraries wi
 
 **One expected FastQC "failure" worth calling out explicitly:** per-sequence GC content flagged as failing on every file. This is a false alarm baked into FastQC's default thresholds, which assume whole-genome-like GC distribution, exome capture deliberately enriches GC-biased exonic regions, so this "failure" is actually confirmation the data is real exome data, not a quality problem.
 
-## Step 2, Adapter Trimming
+## Step 2: Adapter Trimming
 
 fastp trimmed adapters and low-quality bases from all four lanes (two samples × two lanes each).
 
@@ -86,7 +101,7 @@ Insert size peaked around 140bp, right in line with expected exome library prep.
 
 ![Insert size distribution](report/images/06_fastp_insert_size.png)
 
-## Step 3, Alignment
+## Step 3: Alignment
 
 Reads were aligned with BWA-MEM against the **full chromosome 1 reference** (GRCh37), not just a GBA1-only slice. This was a deliberate choice: *GBA1* has a nearby, highly homologous pseudogene (*GBAP1*), and giving BWA the full pseudogene sequence to align against lets it correctly disambiguate reads between the real gene and its pseudogene, rather than forcing false confident mappings.
 
@@ -94,7 +109,7 @@ Coverage across the GBA1 locus shows the expected **exome capture signature**, s
 
 ![GBA1 full region coverage](report/images/07_igv_gba_full_coverage.png)
 
-## Step 4, The GBAP1 Pseudogene Problem (and how the pipeline caught it)
+## Step 4: The GBAP1 Pseudogene Problem (and how the pipeline caught it)
 
 This is the part of the project that turned a routine pipeline into a real investigation. Reads mis-mapping from the GBAP1 pseudogene into the GBA1 locus is a known, documented problem in this gene, and it showed up exactly where expected: a tight cluster of variant calls in the gene's 3' region, all sharing unusually low depth (1-2 reads) and low mapping quality (MAPQ ~26), visually distinguishable in IGV as sparse, low-confidence, partially mismatched reads.
 
@@ -106,7 +121,7 @@ For contrast, here's a clean, high-confidence real variant elsewhere in the gene
 
 ![Clean PASS variant example](report/images/09_igv_pass_variant_example.png)
 
-## Step 5, Joint Variant Calling (both samples)
+## Step 5: Joint Variant Calling (both samples)
 
 Both samples are, biologically, the **same individual** (NA12878, two separate library preparations from the same source DNA). Joint genotyping both together provided a useful internal consistency check: real variants should agree between the two; anything discordant is a flag, not a finding.
 
@@ -125,7 +140,7 @@ A closer look at the phased indel cluster itself (chr1:155,206,277-155,206,284, 
 
 9 of the 10 PASS variants were consistent, high-confidence calls agreeing across both samples. The 10th (chr1:155,212,092) technically passed the formal thresholds but sits directly inside the known pseudogene-affected region and was called in only one sample at shallow depth, treated as low-confidence noise rather than a real finding, precisely because the biology of the region was already understood from Step 4.
 
-## Step 6, Annotation (VEP)
+## Step 6: Annotation (VEP)
 
 All 9 high-confidence variants were annotated against GRCh37 using Ensembl VEP (SIFT + PolyPhen enabled).
 
@@ -135,7 +150,7 @@ All 9 high-confidence variants were annotated against GRCh37 using Ensembl VEP (
 
 **Honest result: every variant found was non-coding**, mostly intronic, with one complex indel cluster (three linked edits, phased as a single haplotype) landing in a splice-region-adjacent sequence context (`splice_polypyrimidine_tract_variant`). No missense or protein-coding variants were present in this variant set, which meant SIFT/PolyPhen (both missense-only tools) had nothing to score, an honest limitation of a two-sample, single-gene-region WES study, not a pipeline failure.
 
-## Step 7, Splice Impact Assessment (in place of structural ddG modeling)
+## Step 7: Splice Impact Assessment (in place of structural ddG modeling)
 
 Since no missense variant was found to run through structural modeling (the originally planned FoldX/ChimeraX step), the analysis pivoted to directly testing the splice-region indel cluster's actual functional impact, using SpliceAI and Pangolin, two independent deep-learning splice-effect predictors.
 
@@ -151,13 +166,6 @@ Since no missense variant was found to run through structural modeling (the orig
 **Result: no evidence of splice disruption.** All six scores (three variants × two tools) stay well below the ~0.2 threshold conventionally used to flag a splice-altering variant. Two independent models agreeing on "no effect" is a fairly confident negative result, and it illustrates a real, useful distinction in variant interpretation: a sequence-context annotation label (*where* a variant sits) is not the same as a functional prediction (*whether it actually matters*). Direct computational scoring, not the annotation category alone, is what resolves that.
 
 ---
-
-## Key results, front and center
-
-- **2 samples, same individual, joint-genotyped**, 26 candidate sites → 10 pass filtering → 9 high-confidence real variants
-- **0 missense/coding variants**, an honest scope limitation of a 2-sample, single-region WES study, reported plainly rather than dressed up
-- **1 predicted pseudogene mis-mapping artifact zone**, correctly anticipated in advance and cleanly caught by filtering, the project's strongest evidence of genuine technical understanding
-- **1 splice-region variant cluster, quantitatively tested, found not to be splice-disrupting**, a complete, real negative result using two independent state-of-the-art predictors (SpliceAI, Pangolin)
 
 ---
 
